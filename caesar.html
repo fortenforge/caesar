@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=windows-1252" http-equiv="content-type">
+    <link rel="shortcut icon" href="http://web.mit.edu/rsridhar/www/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="caesar.css">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans">
+    <script src="jquery.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        var dict = ['apple', 'banana', 'the', 'quick', 'brown', 'hooloovoo', 'esp'];
+
+        $.get("dictionary.txt", function(data) {
+          dict = data.split('\n');
+        });
+
+        function encrypt(plaintext, key) {
+          plaintext = plaintext.toUpperCase();
+          var ciphertext = "";
+          for(var i = 0; i < plaintext.length; i++){
+            var p = plaintext.charCodeAt(i);
+            if(p < 65 || p > 90)
+              ciphertext += plaintext.charAt(i);
+            else
+              ciphertext += String.fromCharCode(65 + ((p-65 + key)%26));
+          };
+
+          var wordSplit = ciphertext.split(' ');
+          ciphertext = "";
+          for(var i = 0; i < wordSplit.length; i++){
+            var word = wordSplit[i].toLowerCase();
+            if(dict.indexOf(word) >= 0){
+              ciphertext += "<span id=\"word\">" + wordSplit[i] + "</span> ";
+            }
+            else
+              ciphertext += wordSplit[i] + " ";
+          }
+
+          return ciphertext.substring(0, ciphertext.length - 1);
+        }
+        $("#EncryptSingle").click( function encryptSingle() {
+          var plaintext = $("#plaintext").val();
+          var key = parseInt($("#key").val());
+          var ciphertext = encrypt(plaintext, key);
+          $("#ciphertext").html(ciphertext);
+        });
+        $("#EncryptAll").click( function encryptAll() {
+          var plaintext = $("#plaintext").val();
+          var ciphertext = "";
+          for(var k = 0; k < 26; k++){
+            ciphertext += encrypt(plaintext, k) + "<br>";
+          }
+          ciphertext = ciphertext.substring(0, ciphertext.length - 4)
+          $("#ciphertext").html(ciphertext);
+        });
+      });
+    </script>
+
+    <title>Caesar Cipher Tool</title>
+  </head>
+  <body>
+    <h1>Caesar Cipher Tool</h1>
+    <div id="toolbox">
+      <p>Message: <input id="plaintext" type="text" name="plaintext"></p>
+      <p>Key: <select id="key">
+        <option value=0>A = 0</option>
+        <option value=1 selected="selected">B = 1</option>
+        <option value=2>C = 2</option>
+        <option value=3>D = 3</option>
+        <option value=4>E = 4</option>
+        <option value=5>F = 5</option>
+        <option value=6>G = 6</option>
+        <option value=7>H = 7</option>
+        <option value=8>I = 8</option>
+        <option value=9>J = 9</option>
+        <option value=10>K = 10</option>
+        <option value=11>L = 11</option>
+        <option value=12>M = 12</option>
+        <option value=13>N = 13</option>
+        <option value=14>O = 14</option>
+        <option value=15>P = 15</option>
+        <option value=16>Q = 16</option>
+        <option value=17>R = 17</option>
+        <option value=18>S = 18</option>
+        <option value=19>T = 19</option>
+        <option value=20>U = 20</option>
+        <option value=21>V = 21</option>
+        <option value=22>W = 22</option>
+        <option value=23>X = 23</option>
+        <option value=24>Y = 24</option>
+        <option value=25>Z = 25</option>
+      </select>
+      <input type="button" id="EncryptSingle" value="Encrypt Single">
+      <input type="button" id="EncryptAll" value="Encrypt All"></p>
+      <span id="output">Output:</span><br>
+      <div id="ciphertext">
+      </div>
+    </div>
+
+  </body>
+</html>
