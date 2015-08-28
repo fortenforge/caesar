@@ -15,14 +15,18 @@
         });
 
         function encrypt(plaintext, key) {
-          plaintext = plaintext.toUpperCase();
+          //plaintext = plaintext.toUpperCase();
           var ciphertext = "";
+          var A = 'A'.charCodeAt(0)
+          var a = 'a'.charCodeAt(0)
           for(var i = 0; i < plaintext.length; i++){
             var p = plaintext.charCodeAt(i);
-            if(p < 65 || p > 90)
-              ciphertext += plaintext.charAt(i);
+            if(p >= A && p <= A + 26)
+              ciphertext += String.fromCharCode(A + ((p-A + key)%26));
+            else if(p >= a && p <= a + 26)
+              ciphertext += String.fromCharCode(a + ((p-a + key)%26));
             else
-              ciphertext += String.fromCharCode(65 + ((p-65 + key)%26));
+              ciphertext += plaintext.charAt(i);
           };
 
           var wordSplit = ciphertext.split(' ');
@@ -38,6 +42,7 @@
 
           return ciphertext.substring(0, ciphertext.length - 1);
         }
+
         $("#EncryptSingle").click( function encryptSingle() {
           var plaintext = $("#plaintext").val();
           var key = parseInt($("#key").val());
