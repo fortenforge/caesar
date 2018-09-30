@@ -21,9 +21,9 @@
           var a = 'a'.charCodeAt(0)
           for(var i = 0; i < plaintext.length; i++){
             var p = plaintext.charCodeAt(i);
-            if(p >= A && p <= A + 26)
+            if(p >= A && p < A + 26)
               ciphertext += String.fromCharCode(A + ((p-A + key)%26));
-            else if(p >= a && p <= a + 26)
+            else if(p >= a && p < a + 26)
               ciphertext += String.fromCharCode(a + ((p-a + key)%26));
             else
               ciphertext += plaintext.charAt(i);
